@@ -1,0 +1,30 @@
+{
+    "name": "dexterity42/shared-project-timesheets",
+    "description": "Share project timesheets with anyone",
+    "homepage": "https://github.com/dexterity42/SharedProjectTimesheetsBundle",
+    "type": "kimai-plugin",
+    "version": "1.0.0",
+    "require": {
+        "kimai/kimai2-composer": "*"
+    },
+    "license": "MIT",
+    "authors": [
+        {
+            "name": "Fabian Vetter",
+            "email": "info@vettersolutions.de",
+            "homepage": "https://vettersolutions.de"
+        }
+    ],
+    "autoload": {
+        "psr-4": {
+            "KimaiPlugin\\SharedProjectTimesheetsBundle\\": ""
+        }
+    },
+    "extra": {
+        "kimai": {
+            "require": "1.9",
+            "version": "1.0.0",
+            "name": "ShareProjectTimesheetsBundle"
+        }
+    }
+}

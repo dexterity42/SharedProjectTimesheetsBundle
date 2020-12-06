@@ -1,0 +1,21 @@
+services:
+    _defaults:
+        autowire: true
+        autoconfigure: true
+        public: false
+
+    KimaiPlugin\SharedProjectTimesheetsBundle\:
+        resource: '../../*'
+        exclude: '../../{Resources}'
+
+    KimaiPlugin\SharedProjectTimesheetsBundle\Controller\:
+        resource: '../../Controller'
+        tags: ['controller.service_arguments']
+
+    KimaiPlugin\SharedProjectTimesheetsBundle\Command\InstallCommand:
+        arguments: ['%kimai.plugin_dir%']
+
+    KimaiPlugin\SharedProjectTimesheetsBundle\Repository\SharedProjectTimesheetRepository:
+        class:     Doctrine\ORM\EntityRepository
+        factory:   ['@doctrine.orm.entity_manager', getRepository]
+        arguments: ['KimaiPlugin\SharedProjectTimesheetsBundle\Entity\SharedProjectTimesheet']

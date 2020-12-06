@@ -1,0 +1,83 @@
+{% extends 'base.html.twig' %}
+{% import "@SharedProjectTimesheets/manage/actions.html.twig" as actions %}
+{% import "macros/datatables.html.twig" as tables %}
+{% import "macros/widgets.html.twig" as widgets %}
+
+{% set columns = {
+    'name': {'class': 'alwaysVisible'},
+    'url': {'class': 'alwaysVisible'},
+    'password': {'class': 'hidden-xs hidden-sm text-center'},
+    'entry_user_visible': {'class': 'hidden-xs hidden-sm text-center'},
+    'entry_rate_visible': {'class': 'hidden-xs hidden-sm text-center'},
+    'actions': {'class': 'hidden-xs hidden-sm'},
+} %}
+
+{% block page_title %}{{ 'shared_project_timesheets.manage.title' | trans }}{% endblock %}
+{% block page_subtitle %}{{ 'shared_project_timesheets.manage.subtitle' | trans }}{% endblock %}
+{% block page_actions %}{{ actions.sharedProjectIndex('index') }}{% endblock %}
+
+{% set tableName = 'shared_project_timesheets_manage' %}
+
+{% block main_before %}
+    {{ tables.data_table_column_modal(tableName, columns) }}
+{% endblock %}
+
+{% block main %}
+    {{ tables.datatable_header(tableName, columns, null, {'translationPrefix': 'shared_project_timesheets.manage.table.'}) }}
+
+    {% for sharedProject in sharedProjects %}
+        <tr class="alternative-link open-edit" data-href="{{ url('update_shared_project_timesheets', {projectId: sharedProject.project.id, shareKey: sharedProject.shareKey}) }}">
+            <td class="{{ tables.data_table_column_class(tableName, columns, 'name') }}">{{ sharedProject.project.name }}</td>
+            <td class="{{ tables.data_table_column_class(tableName, columns, 'url') }}">
+                {% if sharedProject.shareKey %}
+                    <a href="{{ url('view_shared_project_timesheets', {projectId: sharedProject.project.id, shareKey: sharedProject.shareKey}) }}"
+                       target="_blank">
+                        <i class="fa fa-link"></i>
+                        <span class="hidden-xs hidden-sm hidden-md">
+                            {{ url('view_shared_project_timesheets', {projectId: sharedProject.project.id, shareKey: sharedProject.shareKey}) }}
+                        </span>
+                    </a>
+                {% else %}
+                    -
+                {% endif %}
+            </td>
+            <td class="{{ tables.data_table_column_class(tableName, columns, 'password') }}"><i
+                        class="{{ sharedProject.password ? "fa fa-check-circle" : "far fa-circle" }}"></i>
+            </td>
+            <td class="{{ tables.data_table_column_class(tableName, columns, 'entry_user_visible') }}"><i
+                        class="{{ sharedProject.entryUserVisible ? "fa fa-check-circle" : "far fa-circle" }}"></i>
+            </td>
+            <td class="{{ tables.data_table_column_class(tableName, columns, 'entry_rate_visible') }}"><i
+                        class="{{ sharedProject.entryRateVisible ? "fa fa-check-circle" : "far fa-circle" }}"></i>
+            </td>
+            <td class="{{ tables.data_table_column_class(tableName, columns, 'actions') }}">{{ actions.removeSharedProject(sharedProject, 'index') }}</td>
+        </tr>
+    {% endfor %}
+    {% if sharedProjects is empty %}
+    <tr>
+        <td colspan="{{ columns | length }}" class="text-center">
+            <a href="{{ url('create_shared_project_timesheets') }}" class="noEntriesMessage">
+                <i class="fa fa-3x fa-plus-circle"></i>
+                {{ 'shared_project_timesheets.manage.create_link_label' | trans }}
+            </a>
+        </td>
+    </tr>
+    {% endif %}
+
+    {{ tables.data_table_footer() }}
+{% endblock %}
+
+{% block stylesheets %}
+{{ parent() }}
+<style type="text/css">
+    .noEntriesMessage {
+        display: block;
+        padding: 2rem 0.5rem;
+    }
+
+    .noEntriesMessage i {
+        display: block;
+        padding-bottom: 1rem;
+    }
+</style>
+{% endblock %}

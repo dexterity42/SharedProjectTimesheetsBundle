@@ -1,0 +1,142 @@
+{% extends '@SharedProjectTimesheets/top-nav-layout/layout.html.twig' %}
+
+{% block body_start %}
+    data-title="{{- get_title() -}}"
+{% endblock %}
+
+{% block after_body_start %}
+    {% embed 'embeds/modal.html.twig' %}
+        {% block modal_id %}remote_form_modal{% endblock %}
+        {% block modal_title %}{% endblock %}
+        {% block modal_body %}{% endblock %}
+        {% block modal_footer %}{% endblock %}
+    {% endembed %}
+{% endblock %}
+
+{% block page_content_before %}
+    {% set event = trigger(constant('App\\Event\\ThemeEvent::CONTENT_BEFORE')) %}
+    {{ event.content|raw }}
+    <div class="toolbar-pad no-print">
+        {% block main_before %}{% endblock %}
+    </div>
+{% endblock %}
+
+{% block page_content_after %}
+    {% block main_after %}{% endblock %}
+    {% set event = trigger(constant('App\\Event\\ThemeEvent::CONTENT_AFTER')) %}
+    {{ event.content|raw }}
+{% endblock %}
+
+{% block page_content %}
+    {% set event = trigger(constant('App\\Event\\ThemeEvent::CONTENT_START')) %}
+    {{ event.content|raw }}
+    {% block main %}{% endblock %}
+    {% set event = trigger(constant('App\\Event\\ThemeEvent::CONTENT_END')) %}
+    {{ event.content|raw }}
+{% endblock %}
+
+{% block title %}
+    {{- get_title() -}}
+{% endblock %}
+
+{% block page_subtitle %}{% endblock %}
+
+{% block logo_mini %}
+    {% if not kimai_context.branding.mini is empty %}
+        {{ kimai_context.branding.mini|raw }}
+    {% else %}
+        <b>K</b>TT
+    {% endif %}
+{% endblock %}
+
+{% block logo_large %}
+    {% if not kimai_context.branding.company is empty %}
+        {{ kimai_context.branding.company|raw }}
+    {% else %}
+        <b>Kimai</b> - Time Tracking
+    {% endif %}
+{% endblock %}
+
+{% block footer %}
+    <!-- Page rendered on {{ 'now'|date_full }} -->
+{% endblock %}
+
+{% block navbar_start %}{% endblock %}
+
+
+{# these blocks and the hook-in logic by the AdminTheme could be re-used by Kimai or an extension at some point #}
+{% block navbar_messages %}{% endblock %}
+{% block navbar_notifications %}{% endblock %}
+{% block navbar_tasks %}{% endblock %}
+{% block navbar_end %}{% endblock %}
+
+{# deactivated blocks, as Kimai does not ship the sidebar for UX reasons #}
+{% block sidebar_user %}{% endblock %}
+{% block sidebar_search %}{% endblock %}
+
+{% block navbar_user %}{% endblock %}
+
+{% block breadcrumb %}
+    {% block page_search %}{% endblock %}
+    {% block page_actions %}{% endblock %}
+{% endblock %}
+
+{% block stylesheets %}
+    {# we do not call parent() as we use a custom built for the frontend assets and don't want the default <stylesheet> #}
+    {{ encore_entry_link_tags('app') }}
+    {% set event = trigger(constant('App\\Event\\ThemeEvent::STYLESHEET')) %}
+    {{ event.content|raw }}
+{% endblock %}
+
+{% block head %}
+    {{ parent() }}
+    {{ encore_entry_script_tags('app') }}
+    {% include 'partials/head.html.twig' %}
+    {% set event = trigger(constant('App\\Event\\ThemeEvent::HTML_HEAD')) %}
+    {{ event.content|raw }}
+{% endblock %}
+
+{% block javascripts %}
+    {# no call to parent(), as we use a custom built for the frontend assets and don't want the default <script> #}
+    <script type="text/javascript">
+        window.addEventListener('load', function() {
+            var loader = new KimaiWebLoader(
+                {
+                    login: '{{ path('fos_user_security_login') }}',
+                    locale: '{{ app.request.locale }}',
+                    twentyFourHours: {{ 'true'|hour24('false') }},
+                    autoReloadDatatable: {% if theme_config('auto_reload_datatable') %}true{% else %}false{% endif %},
+                    autoComplete: {{ theme_config('autocomplete_chars') }}
+                },
+                {
+                    'confirm': '{{ 'confirm'|trans }}',
+                    'cancel': '{{ 'cancel'|trans }}',
+                    'today': '{{ 'daterangepicker.today'|trans({}, 'daterangepicker') }}',
+                    'yesterday': '{{ 'daterangepicker.yesterday'|trans({}, 'daterangepicker') }}',
+                    'lastWeek': '{{ 'daterangepicker.lastWeek'|trans({}, 'daterangepicker') }}',
+                    'thisWeek': '{{ 'daterangepicker.thisWeek'|trans({}, 'daterangepicker') }}',
+                    'lastMonth': '{{ 'daterangepicker.lastMonth'|trans({}, 'daterangepicker') }}',
+                    'thisMonth': '{{ 'daterangepicker.thisMonth'|trans({}, 'daterangepicker') }}',
+                    'lastYear': '{{ 'daterangepicker.lastYear'|trans({}, 'daterangepicker') }}',
+                    'thisYear': '{{ 'daterangepicker.thisYear'|trans({}, 'daterangepicker') }}',
+                    'customRange': '{{ 'daterangepicker.customRange'|trans({}, 'daterangepicker') }}',
+                    'timesheet.start.success': '{{ 'timesheet.start.success'|trans({}, 'flashmessages') }}',
+                    'timesheet.start.error': '{{ 'timesheet.start.error'|trans({}, 'flashmessages') }}',
+                    'timesheet.start.exceeded_limit': '{{ 'timesheet.start.exceeded_limit'|trans({}, 'flashmessages') }}',
+                    'timesheet.stop.success': '{{ 'timesheet.stop.success'|trans({}, 'flashmessages') }}',
+                    'timesheet.stop.error': '{{ 'timesheet.stop.error'|trans({}, 'flashmessages') }}',
+                    'action.update.success': '{{ 'action.update.success'|trans({}, 'flashmessages') }}',
+                    'action.update.error': '{{ 'action.update.error'|trans({}, 'flashmessages') }}',
+                    'action.delete.success': '{{ 'action.delete.success'|trans({}, 'flashmessages') }}',
+                    'action.delete.error': '{{ 'action.delete.error'|trans({}, 'flashmessages') }}',
+                    'confirm.delete': '{{ 'confirm.delete' |trans }}',
+                    'delete': '{{ 'action.delete' |trans }}',
+                    'login.required': '{{ 'login_required'|trans }}'
+                }
+            );
+            window.kimai = loader.getKimai();
+        });
+    </script>
+    {% set event = trigger(constant('App\\Event\\ThemeEvent::JAVASCRIPT')) %}
+    {{ event.content|raw }}
+{% endblock %}

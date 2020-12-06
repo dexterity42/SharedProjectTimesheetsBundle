@@ -1,0 +1,12 @@
+{% extends '@SharedProjectTimesheets/top-nav-layout/base.html.twig' %}
+
+{% block page_title %}{{ 'shared_project_timesheets.view.error.title' | trans }} {{ project.name }}{% endblock %}
+{% block page_subtitle %}{% endblock %}
+
+{% block main %}
+    <div class="box box-secondary">
+        <div class="box-body">
+            <p>{{ error | trans }}</p>
+        </div>
+    </div>
+{% endblock %}

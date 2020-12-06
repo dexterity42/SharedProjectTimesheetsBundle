@@ -1,0 +1,24 @@
+{% extends '@SharedProjectTimesheets/top-nav-layout/base.html.twig' %}
+
+{% block page_title %}{{ 'shared_project_timesheets.view.auth.title' | trans }} {{ project.name }}{% endblock %}
+{% block page_subtitle %}{% endblock %}
+
+{% block main %}
+    <form action="{{ app.request.uri }}" method="POST">
+        <div class="box box-secondary">
+            <div class="box-body">
+                {% if invalidPassword %}
+                    <div class="alert alert-danger">{{ 'shared_project_timesheets.view.auth.invalid_password' | trans }}</div>
+                {% endif %}
+                <p>{{ 'shared_project_timesheets.view.auth.description' | trans }}</p>
+                <p>
+                    <label for="spt-password">{{ 'shared_project_timesheets.view.auth.password_label' | trans }}</label>
+                    <input type="password" id="spt-password" name="spt-password">
+                </p>
+            </div>
+            <div class="box-footer">
+                <button type="submit" class="btn btn-primary">{{ 'shared_project_timesheets.view.auth.send' | trans }}</button>
+            </div>
+        </div>
+    </form>
+{% endblock %}

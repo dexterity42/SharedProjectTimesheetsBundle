@@ -1,0 +1,24 @@
+{% macro sharedProjectIndex(view) %}
+    {% import "macros/widgets.html.twig" as widgets %}
+    {% set actions = {} %}
+    {% set actions = actions|merge({'create': path('create_shared_project_timesheets')}) %}
+
+    {% set event = trigger('actions.projectIndex', {'actions': actions, 'view': view}) %}
+    {{ widgets.page_actions(event.payload.actions) }}
+{% endmacro %}
+
+{% macro sharedProjectChild(view) %}
+    {% import "macros/widgets.html.twig" as widgets %}
+    {% set actions = {} %}
+    {% set actions = actions|merge({'back': path('manage_shared_project_timesheets')}) %}
+    {% set event = trigger('actions.projectCreateOrEdit', {'actions': actions, 'view': view}) %}
+    {{ widgets.page_actions(event.payload.actions) }}
+{% endmacro %}
+
+{% macro removeSharedProject(sharedProject, view) %}
+    {% import "macros/widgets.html.twig" as widgets %}
+    {% set actions = {} %}
+    {% set actions = actions|merge({'trash': path('remove_shared_project_timesheets', {projectId: sharedProject.project.id, shareKey: sharedProject.shareKey})}) %}
+    {% set event = trigger('actions.deleteSharedProject', {'actions': actions, 'view': view}) %}
+    {{ widgets.table_actions(event.payload.actions) }}
+{% endmacro %}

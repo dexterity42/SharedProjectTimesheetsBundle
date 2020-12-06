@@ -1,0 +1,58 @@
+shared_project_timesheets:
+    menu:
+        title: Shared project timesheets
+    manage:
+        title: Shared project timesheets
+        subtitle: Manage your shared project timesheets
+        create_link_label: Fügen Sie einen Eintrag hinzu, um Projektzeiten zu teilen
+        create:
+            subtitle: Create entry
+        update:
+            subtitle: Edit entry
+        form:
+            project: Project
+            password: Password (leave empty to reset)
+            entry_user_visible: Show entry user
+            entry_rate_visible: Show entry rate
+            save: Save
+        table:
+            name: Project name
+            password: Password protection
+            url: Link
+            entry_user_visible: Show entry user
+            entry_rate_visible: Show entry rate
+        persist:
+            success: Saved successfully.
+            error: An error occurred. Please try again.
+    view:
+        title: Timesheet of project
+        selection_text: Showing time records of
+        month:
+            1: January
+            2: February
+            3: March
+            4: April
+            5: May
+            6: June
+            7: July
+            8: August
+            9: September
+            10: October
+            11: November
+            12: December
+        table:
+            description: Description
+            duration: Duration
+            empty: No entries available for this month
+            user: User
+            rate_hour: Hour rate
+            rate_total: Total rate
+        auth:
+            title: Access control for project
+            description: To get access to this projects time records, please enter the required password.
+            password_label: "Enter password:"
+            send: Send
+            invalid_password: Invalid password
+        error:
+            title: An error occurred
+            access_denied: Access denied.

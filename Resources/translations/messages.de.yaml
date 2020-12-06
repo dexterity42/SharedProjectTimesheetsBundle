@@ -1,0 +1,58 @@
+shared_project_timesheets:
+    menu:
+        title: Geteilte Projektzeiten
+    manage:
+        title: Geteilte Projektzeiten
+        subtitle: Verwalten Sie Ihre geteilten Projektzeiten
+        create_link_label: Fügen Sie einen Eintrag hinzu, um Projektzeiten zu teilen
+        create:
+            subtitle: Eintrag hinzufügen
+        update:
+            subtitle: Eintrag bearbeiten
+        form:
+            project: Projekt
+            password: Passwort (leer lassen zum Zurücksetzen)
+            entry_user_visible: Benutzer sichtbar
+            entry_rate_visible: Kosten sichtbar
+            save: Speichern
+        table:
+            name: Name des Projekts
+            password: Passwortgeschützt
+            url: Link
+            entry_user_visible: Benutzer sichtbar
+            entry_rate_visible: Kosten sichtbar
+        persist:
+            success: Erfolgreich gespeichert.
+            error: Speichern fehlgeschlagen. Bitte versuchen Sie es erneut.
+    view:
+        title: Zeiten des Projektes
+        selection_text: Zeige Zeiten von
+        month:
+            1: Januar
+            2: Februar
+            3: März
+            4: April
+            5: Mai
+            6: Juni
+            7: Juli
+            8: August
+            9: September
+            10: Oktober
+            11: November
+            12: Dezember
+        table:
+            description: Beschreibung
+            duration: Dauer
+            empty: Keine Einträge verfügbar für diesen Monat
+            user: Benutzer
+            rate_hour: Stundenlohn
+            rate_total: Lohn gesamt
+        auth:
+            title: Zugangskontrolle für das Projekt
+            description: Um Zugang zu den Projektzeiten zu erhalten, geben Sie bitte das benötigte Passwort ein.
+            password_label: "Passwort eingeben:"
+            send: Senden
+            invalid_password: Ungültiges Passwort
+        error:
+            title: Ein Fehler ist aufgetreten
+            access_denied: Zugriff verweigert.

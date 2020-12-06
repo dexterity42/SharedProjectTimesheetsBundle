@@ -1,0 +1,15 @@
+{% extends 'base.html.twig' %}
+{% import "@SharedProjectTimesheets/manage/actions.html.twig" as actions %}
+{% import "macros/widgets.html.twig" as widgets %}
+
+{% block page_title %}{{ 'shared_project_timesheets.manage.title' | trans }}{% endblock %}
+{% block page_subtitle %}{{ ('shared_project_timesheets.manage.' ~ type ~ '.subtitle') | trans }}{% endblock %}
+{% block page_actions %}{{ actions.sharedProjectChild('create') }}{% endblock %}
+
+{% block main %}
+    <div class="box box-secondary">
+        <div class="box-body">
+            {{ form(form) }}
+        </div>
+    </div>
+{% endblock %}

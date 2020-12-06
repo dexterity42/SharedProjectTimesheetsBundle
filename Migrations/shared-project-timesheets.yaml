@@ -1,0 +1,12 @@
+# --------------------------------------------------------------------------------------------------
+# Generate a new migration with:
+# bin/console doctrine:migrations:diff --em=default --configuration=var/plugins/SharedProjectTimesheetsBundle/Migrations/shared-project-timesheets.yaml
+#
+# Execute all migrations with:
+# bin/console kimai:bundle:shared-project-timesheets:install
+# --------------------------------------------------------------------------------------------------
+
+name: SharedProjectTimesheetsMigrations
+table_name: bundle_migration_shared_project_timesheets
+migrations_namespace: KimaiPlugin\SharedProjectTimesheetsBundle\Migrations
+migrations_directory: var/plugins/SharedProjectTimesheetsBundle/Migrations
