@@ -20,13 +20,13 @@ git clone --depth 1 --branch master https://github.com/dexterity42/SharedProject
 
 Go back to the root of your Kimai installation and clear the cache:
 ```
+cd /kimai/
 bin/console cache:clear
 bin/console cache:warmup
 ```
 
 Execute database migrations:
 ```
-cd /kimai/
 bin/console kimai:bundle:shared-project-timesheets:install
 ```
 
