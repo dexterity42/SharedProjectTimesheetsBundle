@@ -133,7 +133,9 @@ class ManageController extends AbstractController
                 $this->flashError($this->translator->trans('shared_project_timesheets.manage.persist.error'));
             }
         } else if ( !$form->isSubmitted() ) {
-            $form->get('password')->setData(ManageService::PASSWORD_DO_NOT_CHANGE_VALUE);
+            if ( !empty($sharedProject->getPassword()) ) {
+                $form->get('password')->setData(ManageService::PASSWORD_DO_NOT_CHANGE_VALUE);
+            }
         }
 
         return $this->render(

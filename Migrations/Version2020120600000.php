@@ -24,7 +24,7 @@ final class Version2020120600000 extends AbstractMigration
             $table->addColumn('id', Types::INTEGER, ['autoincrement' => true, 'notnull' => true]);
             $table->addColumn('project_id', Types::INTEGER, ['notnull' => true]);
             $table->addColumn('share_key', Types::STRING, ['length' => 20, 'notnull' => true]);
-            $table->addColumn('password', Types::STRING, ['length' => 50, 'default' => null, 'notnull' => false]);
+            $table->addColumn('password', Types::STRING, ['length' => 255, 'default' => null, 'notnull' => false]);
             $table->addColumn('entry_user_visible', Types::BOOLEAN, ['default' => false, 'notnull' => true]);
             $table->addColumn('entry_rate_visible', Types::BOOLEAN, ['default' => false, 'notnull' => true]);
 
