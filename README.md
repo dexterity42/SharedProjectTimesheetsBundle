@@ -18,16 +18,16 @@ cd /kimai/var/plugins/
 git clone --depth 1 --branch master https://github.com/dexterity42/SharedProjectTimesheetsBundle.git
 ```
 
-Go back to the root of your Kimai installation and execute database migrations:
-```
-cd /kimai/
-bin/console kimai:bundle:shared-project-timesheets:install
-```
-
-Then rebuild the cache: 
+Go back to the root of your Kimai installation and clear the cache:
 ```
 bin/console cache:clear
 bin/console cache:warmup
+```
+
+Execute database migrations:
+```
+cd /kimai/
+bin/console kimai:bundle:shared-project-timesheets:install
 ```
 
 You're done. Open up your browser and navigate to "Shared project timesheets".
