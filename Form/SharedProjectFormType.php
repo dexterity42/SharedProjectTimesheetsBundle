@@ -5,10 +5,12 @@ namespace KimaiPlugin\SharedProjectTimesheetsBundle\Form;
 use App\Entity\Project;
 use App\Repository\ProjectRepository;
 use KimaiPlugin\SharedProjectTimesheetsBundle\Entity\SharedProjectTimesheet;
+use KimaiPlugin\SharedProjectTimesheetsBundle\Model\MergeRecordMode;
 use KimaiPlugin\SharedProjectTimesheetsBundle\Service\ManageService;
 use Symfony\Bridge\Doctrine\Form\Type\EntityType;
 use Symfony\Component\Form\AbstractType;
 use Symfony\Component\Form\Extension\Core\Type\CheckboxType;
+use Symfony\Component\Form\Extension\Core\Type\ChoiceType;
 use Symfony\Component\Form\Extension\Core\Type\PasswordType;
 use Symfony\Component\Form\Extension\Core\Type\SubmitType;
 use Symfony\Component\Form\FormBuilderInterface;
@@ -21,6 +23,8 @@ class SharedProjectFormType extends AbstractType
 
     public function buildForm(FormBuilderInterface $builder, array $options): void
     {
+        $mergeRecordTypes = array_flip(MergeRecordMode::getModes());
+
         $builder
             ->add('project', EntityType::class, [
                 'label' => 'shared_project_timesheets.manage.form.project',
@@ -32,11 +36,17 @@ class SharedProjectFormType extends AbstractType
                         ->orderBy('p.name', 'ASC');
                 },
             ])
+            ->add('recordMergeMode', ChoiceType::class, [
+                'label' => 'shared_project_timesheets.manage.form.record_merge_mode',
+                'required' => true,
+                'choices' => $mergeRecordTypes,
+            ])
             ->add('password', PasswordType::class, [
                 'label' => 'shared_project_timesheets.manage.form.password',
                 'required' => false,
                 'always_empty' => false,
                 'mapped' => false,
+                'help' => 'shared_project_timesheets.manage.form.password_hint',
             ])
             ->add('entryUserVisible', CheckboxType::class, [
                 'label' => 'shared_project_timesheets.manage.form.entry_user_visible',

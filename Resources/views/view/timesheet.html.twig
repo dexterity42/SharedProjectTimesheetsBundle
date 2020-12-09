@@ -33,6 +33,7 @@
             <table class="table table-striped table-hover">
                 <thead>
                     <tr>
+                        <th>{{ 'shared_project_timesheets.view.table.date' | trans }}</th>
                         <th>{{ 'shared_project_timesheets.view.table.description' | trans }}</th>
                         {% if sharedProject.entryUserVisible %}
                         <th>{{ 'shared_project_timesheets.view.table.user' | trans }}</th>
@@ -46,14 +47,23 @@
                 </thead>
                 {% for record in timeRecords %}
                     <tr>
-                        <td>{{ record.description }}</td>
+                        <td>{{ record.date | date_short }}</td>
+                        <td>{{ record.description | e | nl2br }}</td>
                         {% if sharedProject.entryUserVisible %}
                             <td>{{ record.user.displayName }}</td>
                         {% endif %}
                         <td>{{ record.duration | duration }}</td>
                         {% if sharedProject.entryRateVisible %}
-                            <td>{{ record.hourlyRate | format_currency('EUR') }}</td>
-                            <td>{{ record.rate | format_currency('EUR') }}</td>
+                            {% if record.differentHourlyRates %}
+                                <td>
+                                    {% for info in record.hourlyRates %}
+                                        <div>{{ info.duration | duration }} - {{ info.hourlyRate | format_currency(currency) }}</div>
+                                    {% endfor %}
+                                </td>
+                            {% else %}
+                                <td>{{ record.hourlyRates[0].hourlyRate | format_currency(currency) }}</td>
+                            {% endif %}
+                            <td>{{ record.rate | format_currency(currency) }}</td>
                         {% endif %}
                     </tr>
                 {% endfor %}
@@ -61,13 +71,14 @@
                 <tfoot>
                     <tr>
                         <th></th>
+                        <th></th>
                         {% if sharedProject.entryUserVisible %}
                         <th></th>
                         {% endif %}
                         <th>{{ durationSum | duration }}</th>
                         {% if sharedProject.entryRateVisible %}
                         <th></th>
-                        <th>{{ rateSum | format_currency('EUR') }}</th>
+                        <th>{{ rateSum | format_currency(currency) }}</th>
                         {% endif %}
                     </tr>
                 </tfoot>
