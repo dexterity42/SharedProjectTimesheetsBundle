@@ -1,17 +1,20 @@
 shared_project_timesheets:
     menu:
         title: Shared project timesheets
+
     manage:
         title: Shared project timesheets
         subtitle: Manage your shared project timesheets
-        create_link_label: Fügen Sie einen Eintrag hinzu, um Projektzeiten zu teilen
+        create_link_label: Create an entry to share your project timesheets
         create:
             subtitle: Create entry
         update:
             subtitle: Edit entry
         form:
             project: Project
-            password: Password (leave empty to reset)
+            record_merge_mode: Merge records of one day
+            password: Password
+            password_hint: Leave empty to set no password
             entry_user_visible: Show entry user
             entry_rate_visible: Show entry rate
             save: Save
@@ -19,11 +22,13 @@ shared_project_timesheets:
             name: Project name
             password: Password protection
             url: Link
+            record_merge_mode: Merge records
             entry_user_visible: Show entry user
             entry_rate_visible: Show entry rate
         persist:
             success: Saved successfully.
             error: An error occurred. Please try again.
+
     view:
         title: Timesheet of project
         selection_text: Showing time records of
@@ -41,6 +46,7 @@ shared_project_timesheets:
             11: November
             12: December
         table:
+            date: Date
             description: Description
             duration: Duration
             empty: No entries available for this month
@@ -56,3 +62,10 @@ shared_project_timesheets:
         error:
             title: An error occurred
             access_denied: Access denied.
+
+    model:
+        merge_record_mode:
+            none: No
+            merge: Yes, merge all
+            merge_use_first_of_day: Yes, merge all and use description of first record
+            merge_use_last_of_day: Yes, merge all and use description of last record

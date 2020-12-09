@@ -1,6 +1,7 @@
 shared_project_timesheets:
     menu:
         title: Geteilte Projektzeiten
+
     manage:
         title: Geteilte Projektzeiten
         subtitle: Verwalten Sie Ihre geteilten Projektzeiten
@@ -11,7 +12,9 @@ shared_project_timesheets:
             subtitle: Eintrag bearbeiten
         form:
             project: Projekt
-            password: Passwort (leer lassen zum Zurücksetzen)
+            record_merge_mode: Zeiten eines Tages zusammenführen
+            password: Passwort
+            password_hint: Feld leer lassen um kein Passwort festzulegen
             entry_user_visible: Benutzer sichtbar
             entry_rate_visible: Kosten sichtbar
             save: Speichern
@@ -19,11 +22,13 @@ shared_project_timesheets:
             name: Name des Projekts
             password: Passwortgeschützt
             url: Link
+            record_merge_mode: Zeiten zusammenführen
             entry_user_visible: Benutzer sichtbar
             entry_rate_visible: Kosten sichtbar
         persist:
             success: Erfolgreich gespeichert.
             error: Speichern fehlgeschlagen. Bitte versuchen Sie es erneut.
+
     view:
         title: Zeiten des Projektes
         selection_text: Zeige Zeiten von
@@ -41,6 +46,7 @@ shared_project_timesheets:
             11: November
             12: Dezember
         table:
+            date: Datum
             description: Beschreibung
             duration: Dauer
             empty: Keine Einträge verfügbar für diesen Monat
@@ -56,3 +62,10 @@ shared_project_timesheets:
         error:
             title: Ein Fehler ist aufgetreten
             access_denied: Zugriff verweigert.
+
+    model:
+        merge_record_mode:
+            none: Nein
+            merge: Ja, alle zusammenführen
+            merge_use_first_of_day: Ja, alle zusammenführen und Beschreibung des ersten Eintrags wählen
+            merge_use_last_of_day: Ja, alle zusammenführen und Beschreibung des letzten Eintrags wählen

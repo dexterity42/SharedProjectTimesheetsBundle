@@ -15,11 +15,6 @@
             "homepage": "https://vettersolutions.de"
         }
     ],
-    "autoload": {
-        "psr-4": {
-            "KimaiPlugin\\SharedProjectTimesheetsBundle\\": ""
-        }
-    },
     "extra": {
         "kimai": {
             "require": "1.9",

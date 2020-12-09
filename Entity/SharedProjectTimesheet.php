@@ -5,6 +5,7 @@ namespace KimaiPlugin\SharedProjectTimesheetsBundle\Entity;
 
 use App\Entity\Project;
 use Doctrine\ORM\Mapping as ORM;
+use KimaiPlugin\SharedProjectTimesheetsBundle\Model\MergeRecordMode;
 use Symfony\Component\Validator\Constraints as Assert;
 
 /**
@@ -66,6 +67,14 @@ class SharedProjectTimesheet
      * @ORM\Column(name="entry_rate_visible", type="boolean", nullable=false)
      */
     protected $entryRateVisible = false;
+
+    /**
+     * @var string
+     *
+     * @ORM\Column(name="record_merge_mode", type="string", length=50, nullable=false)
+     * @Assert\Length(max=50)
+     */
+    protected $recordMergeMode = MergeRecordMode::MODE_MERGE;
 
     /**
      * @return Project
@@ -157,6 +166,25 @@ class SharedProjectTimesheet
     public function setEntryRateVisible(bool $entryRateVisible): SharedProjectTimesheet
     {
         $this->entryRateVisible = (bool) $entryRateVisible;
+
+        return $this;
+    }
+
+    /**
+     * @return string
+     */
+    public function getRecordMergeMode(): string
+    {
+        return $this->recordMergeMode;
+    }
+
+    /**
+     * @param string $recordMergeMode
+     * @return SharedProjectTimesheet
+     */
+    public function setRecordMergeMode(string $recordMergeMode): SharedProjectTimesheet
+    {
+        $this->recordMergeMode = $recordMergeMode;
 
         return $this;
     }

@@ -4,16 +4,19 @@ namespace KimaiPlugin\SharedProjectTimesheetsBundle\Controller;
 
 use App\Controller\AbstractController;
 use App\Entity\Project;
+use App\Entity\Timesheet;
 use App\Repository\TimesheetRepository;
+use DateInterval;
 use DateTime;
 use Doctrine\ORM\Query\Expr\Join;
+use KimaiPlugin\SharedProjectTimesheetsBundle\Model\MergeRecordMode;
+use KimaiPlugin\SharedProjectTimesheetsBundle\Model\TimeRecord;
 use KimaiPlugin\SharedProjectTimesheetsBundle\Repository\SharedProjectTimesheetRepository;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Session\SessionInterface;
 use Symfony\Component\HttpKernel\Exception\NotFoundHttpException;
 use Symfony\Component\Routing\Annotation\Route;
 use Symfony\Component\Security\Core\Encoder\NativePasswordEncoder;
-use Symfony\Component\Security\Core\Encoder\UserPasswordEncoderInterface;
 
 /**
  * @Route(path="/auth/shared-project-timesheets")
@@ -45,7 +48,6 @@ class ViewController extends AbstractController
      * @param SharedProjectTimesheetRepository $sharedProjectTimesheetRepository
      * @param TimesheetRepository $timesheetRepository
      * @param SessionInterface $session
-     * @param UserPasswordEncoderInterface $encoder
      */
     public function __construct(
         SharedProjectTimesheetRepository $sharedProjectTimesheetRepository,
@@ -114,15 +116,17 @@ class ViewController extends AbstractController
 
         $month = max(min($month, 12), 1);
 
-        $begin = new DateTime($year.'-'.$month.'-01 00:00:00');
-        $end = new DateTime($year.'-'.($month % 12 + 1).'-01 00:00:00');
+        $begin = new DateTime($year . '-' . $month . '-01 00:00:00');
+        $end = (new DateTime($year . '-' . $month . '-01 00:00:00'))
+            ->add(new DateInterval('P1M'));
 
-        $timeRecords = $this->timesheetRepository->createQueryBuilder("t")
+        /* @var $timesheets Timesheet[] */
+        $timesheets = $this->timesheetRepository->createQueryBuilder("t")
             ->innerJoin(Project::class, "p", Join::WITH, "p.id = t.project")
             ->where("p.id = :project")
             ->andWhere("t.begin BETWEEN :begin AND :end")
             ->andWhere("t.end IS NOT NULL")
-            ->orderBy("t.begin", "DESC")
+            ->orderBy("t.begin", "ASC")
             ->setParameters(
                 [
                     'project' => $sharedProject->getProject(),
@@ -133,11 +137,35 @@ class ViewController extends AbstractController
             ->getQuery()
             ->execute();
 
+        /* @var $timeRecords TimeRecord[] */
+        $timeRecords = [];
+
+        // Filter time records by merge mode
+        $mergeMode = $sharedProject->getRecordMergeMode();
+        foreach ($timesheets as $timesheet) {
+            if ($mergeMode !== MergeRecordMode::MODE_NONE) {
+                $key = $timesheet->getBegin()->format("Y-m-d");
+                if (!array_key_exists($key, $timeRecords)) {
+                    $timeRecords[$key] = TimeRecord::fromTimesheet($timesheet, $mergeMode);
+                } else {
+                    $timeRecords[$key]->addTimesheet($timesheet, $mergeMode);
+                }
+            } else {
+                $timeRecords[] = TimeRecord::fromTimesheet($timesheet, $mergeMode);
+            }
+        }
+
         $rateSum = 0;
         $durationSum = 0;
         foreach ($timeRecords as $timeRecord) {
             $rateSum += $timeRecord->getRate();
             $durationSum += $timeRecord->getDuration();
+        }
+
+        $currency = 'EUR';
+        $customer = $sharedProject->getProject()->getCustomer();
+        if ( $customer !== null ) {
+            $currency = $customer->getCurrency();
         }
 
         return $this->render(
@@ -149,6 +177,7 @@ class ViewController extends AbstractController
                 'durationSum' => $durationSum,
                 'year' => $year,
                 'month' => $month,
+                'currency' => $currency,
             ]
         );
     }
