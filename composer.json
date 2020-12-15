@@ -3,9 +3,11 @@
     "description": "Share project timesheets with anyone",
     "homepage": "https://github.com/dexterity42/SharedProjectTimesheetsBundle",
     "type": "kimai-plugin",
-    "version": "1.0.0",
-    "require": {
-        "kimai/kimai2-composer": "*"
+    "version": "1.0.1",
+    "autoload": {
+        "psr-4": {
+            "KimaiPlugin\\SharedProjectTimesheetsBundle\\": ""
+        }
     },
     "license": "MIT",
     "authors": [
@@ -18,8 +20,11 @@
     "extra": {
         "kimai": {
             "require": "1.9",
-            "version": "1.0.0",
+            "version": "1.0.1",
             "name": "ShareProjectTimesheetsBundle"
         }
+    },
+    "require-dev": {
+        "kevinpapst/kimai2": "^1.10"
     }
 }
