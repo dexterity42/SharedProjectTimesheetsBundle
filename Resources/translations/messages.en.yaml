@@ -13,11 +13,9 @@ shared_project_timesheets:
         form:
             project: Project
             record_merge_mode: Merge records of one day
-            password: Password
             password_hint: Leave empty to set no password
             entry_user_visible: Show entry user
             entry_rate_visible: Show entry rate
-            save: Save
         table:
             name: Project name
             password: Password protection
