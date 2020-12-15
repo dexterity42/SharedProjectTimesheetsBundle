@@ -5,10 +5,10 @@ namespace KimaiPlugin\SharedProjectTimesheetsBundle\Controller;
 use App\Controller\AbstractController;
 use App\Entity\Project;
 use App\Entity\Timesheet;
+use App\Repository\Query\TimesheetQuery;
 use App\Repository\TimesheetRepository;
 use DateInterval;
 use DateTime;
-use Doctrine\ORM\Query\Expr\Join;
 use KimaiPlugin\SharedProjectTimesheetsBundle\Model\MergeRecordMode;
 use KimaiPlugin\SharedProjectTimesheetsBundle\Model\TimeRecord;
 use KimaiPlugin\SharedProjectTimesheetsBundle\Repository\SharedProjectTimesheetRepository;
@@ -97,7 +97,7 @@ class ViewController extends AbstractController
 
             if (!$this->session->has($sessionPasswordKey)) {
                 // Check given password
-                if ($this->encoder->isPasswordValid($hashedPassword, $givenPassword, null)) {
+                if (!empty($givenPassword) && $this->encoder->isPasswordValid($hashedPassword, $givenPassword, null)) {
                     $this->session->set($sessionPasswordKey, true);
                 } else {
                     return $this->render(
@@ -117,25 +117,14 @@ class ViewController extends AbstractController
         $month = max(min($month, 12), 1);
 
         $begin = new DateTime($year . '-' . $month . '-01 00:00:00');
-        $end = (new DateTime($year . '-' . $month . '-01 00:00:00'))
-            ->add(new DateInterval('P1M'));
+        $end = clone $begin;
+        $end->add(new DateInterval('P1M'));
 
-        /* @var $timesheets Timesheet[] */
-        $timesheets = $this->timesheetRepository->createQueryBuilder("t")
-            ->innerJoin(Project::class, "p", Join::WITH, "p.id = t.project")
-            ->where("p.id = :project")
-            ->andWhere("t.begin BETWEEN :begin AND :end")
-            ->andWhere("t.end IS NOT NULL")
-            ->orderBy("t.begin", "ASC")
-            ->setParameters(
-                [
-                    'project' => $sharedProject->getProject(),
-                    'begin' => $begin,
-                    'end' => $end,
-                ]
-            )
-            ->getQuery()
-            ->execute();
+        $query = new TimesheetQuery();
+        $query->setBegin($begin);
+        $query->setEnd($end);
+        $query->addProject($sharedProject->getProject());
+        $timesheets = $this->timesheetRepository->getTimesheetsForQuery($query);
 
         /* @var $timeRecords TimeRecord[] */
         $timeRecords = [];
