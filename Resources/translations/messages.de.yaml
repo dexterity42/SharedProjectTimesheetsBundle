@@ -13,11 +13,9 @@ shared_project_timesheets:
         form:
             project: Projekt
             record_merge_mode: Zeiten eines Tages zusammenführen
-            password: Passwort
             password_hint: Feld leer lassen um kein Passwort festzulegen
             entry_user_visible: Benutzer sichtbar
             entry_rate_visible: Kosten sichtbar
-            save: Speichern
         table:
             name: Name des Projekts
             password: Passwortgeschützt

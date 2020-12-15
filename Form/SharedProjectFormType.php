@@ -2,12 +2,10 @@
 
 namespace KimaiPlugin\SharedProjectTimesheetsBundle\Form;
 
-use App\Entity\Project;
-use App\Repository\ProjectRepository;
+use App\Form\Type\ProjectType;
 use KimaiPlugin\SharedProjectTimesheetsBundle\Entity\SharedProjectTimesheet;
 use KimaiPlugin\SharedProjectTimesheetsBundle\Model\MergeRecordMode;
 use KimaiPlugin\SharedProjectTimesheetsBundle\Service\ManageService;
-use Symfony\Bridge\Doctrine\Form\Type\EntityType;
 use Symfony\Component\Form\AbstractType;
 use Symfony\Component\Form\Extension\Core\Type\CheckboxType;
 use Symfony\Component\Form\Extension\Core\Type\ChoiceType;
@@ -26,15 +24,8 @@ class SharedProjectFormType extends AbstractType
         $mergeRecordTypes = array_flip(MergeRecordMode::getModes());
 
         $builder
-            ->add('project', EntityType::class, [
-                'label' => 'shared_project_timesheets.manage.form.project',
+            ->add('project', ProjectType::class, [
                 'required' => true,
-                'class' => Project::class,
-                'choice_label' => 'name',
-                'query_builder' => function(ProjectRepository $projectRepository) {
-                    return $projectRepository->createQueryBuilder('p')
-                        ->orderBy('p.name', 'ASC');
-                },
             ])
             ->add('recordMergeMode', ChoiceType::class, [
                 'label' => 'shared_project_timesheets.manage.form.record_merge_mode',
@@ -42,7 +33,7 @@ class SharedProjectFormType extends AbstractType
                 'choices' => $mergeRecordTypes,
             ])
             ->add('password', PasswordType::class, [
-                'label' => 'shared_project_timesheets.manage.form.password',
+                'label' => 'label.password',
                 'required' => false,
                 'always_empty' => false,
                 'mapped' => false,
@@ -57,7 +48,7 @@ class SharedProjectFormType extends AbstractType
                 'required' => false,
             ])
             ->add('save', SubmitType::class, [
-                'label' => 'shared_project_timesheets.manage.form.save',
+                'label' => 'action.save',
             ]);
     }
 
