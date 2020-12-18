@@ -1,10 +1,17 @@
 <?php
+/**
+ * This file is part of the SharedProjectTimesheetsBundle for Kimai 2.
+ * All rights reserved by Fabian Vetter (https://vettersolutions.de).
+ *
+ * For the full copyright and license information, please view the LICENSE file
+ * that was distributed with this source code.
+ */
 
 namespace KimaiPlugin\SharedProjectTimesheetsBundle\Form;
 
 use App\Form\Type\ProjectType;
 use KimaiPlugin\SharedProjectTimesheetsBundle\Entity\SharedProjectTimesheet;
-use KimaiPlugin\SharedProjectTimesheetsBundle\Model\MergeRecordMode;
+use KimaiPlugin\SharedProjectTimesheetsBundle\Model\RecordMergeMode;
 use KimaiPlugin\SharedProjectTimesheetsBundle\Service\ManageService;
 use Symfony\Component\Form\AbstractType;
 use Symfony\Component\Form\Extension\Core\Type\CheckboxType;
@@ -21,7 +28,7 @@ class SharedProjectFormType extends AbstractType
 
     public function buildForm(FormBuilderInterface $builder, array $options): void
     {
-        $mergeRecordTypes = array_flip(MergeRecordMode::getModes());
+        $mergeRecordTypes = array_flip(RecordMergeMode::getModes());
 
         $builder
             ->add('project', ProjectType::class, [

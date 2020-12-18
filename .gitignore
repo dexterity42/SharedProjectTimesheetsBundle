@@ -167,3 +167,8 @@ fabric.properties
 ### Symfony Patch ###
 /web/css/
 /web/js/
+
+
+### SharedProjectTimesheetsBundle ###
+/tests/coverage/
+.phpunit.result.cache

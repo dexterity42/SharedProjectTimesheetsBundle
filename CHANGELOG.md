@@ -4,4 +4,4 @@
 
 - Initial version
   
-Compatible with Kimai 1.9+
+Compatible with Kimai 1.11+
