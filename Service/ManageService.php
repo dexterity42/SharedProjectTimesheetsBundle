@@ -1,16 +1,22 @@
 <?php
-
+/**
+ * This file is part of the SharedProjectTimesheetsBundle for Kimai 2.
+ * All rights reserved by Fabian Vetter (https://vettersolutions.de).
+ *
+ * For the full copyright and license information, please view the LICENSE file
+ * that was distributed with this source code.
+ */
 
 namespace KimaiPlugin\SharedProjectTimesheetsBundle\Service;
 
 
+use App\Entity\Project;
 use Doctrine\ORM\OptimisticLockException;
 use Doctrine\ORM\ORMException;
 use KimaiPlugin\SharedProjectTimesheetsBundle\Entity\SharedProjectTimesheet;
 use KimaiPlugin\SharedProjectTimesheetsBundle\Repository\SharedProjectTimesheetRepository;
 use Symfony\Component\HttpFoundation\Session\SessionInterface;
 use Symfony\Component\Security\Core\Encoder\NativePasswordEncoder;
-use Symfony\Component\Serializer\SerializerInterface;
 
 
 class ManageService
@@ -23,28 +29,12 @@ class ManageService
     private $sharedProjectTimesheetRepository;
 
     /**
-     * @var SerializerInterface
-     */
-    private $serializer;
-
-    /**
-     * @var SessionInterface
-     */
-    private $session;
-
-    /**
      * @var NativePasswordEncoder
      */
     private $encoder;
 
-    public function __construct(
-        SharedProjectTimesheetRepository $sharedProjectTimesheetRepository,
-        SerializerInterface $serializer,
-        SessionInterface $session
-    ) {
+    public function __construct(SharedProjectTimesheetRepository $sharedProjectTimesheetRepository) {
         $this->sharedProjectTimesheetRepository = $sharedProjectTimesheetRepository;
-        $this->serializer = $serializer;
-        $this->session = $session;
 
         $this->encoder = new NativePasswordEncoder();
     }
@@ -55,7 +45,7 @@ class ManageService
      * @throws ORMException
      * @throws OptimisticLockException
      */
-    public function create(SharedProjectTimesheet $sharedProjectTimesheet, ?string $password = null)
+    public function create(SharedProjectTimesheet $sharedProjectTimesheet, ?string $password = null): SharedProjectTimesheet
     {
         // Set share key
         if ( $sharedProjectTimesheet->getShareKey() === null ) {
@@ -71,7 +61,7 @@ class ManageService
             } while ($existingEntry !== null);
         }
 
-        $this->update($sharedProjectTimesheet, $password);
+        return $this->update($sharedProjectTimesheet, $password);
     }
 
     /**
@@ -80,8 +70,18 @@ class ManageService
      * @throws ORMException
      * @throws OptimisticLockException
      */
-    public function update(SharedProjectTimesheet $sharedProjectTimesheet, ?string $newPassword = null)
+    public function update(SharedProjectTimesheet $sharedProjectTimesheet, ?string $newPassword = null): SharedProjectTimesheet
     {
+        // Check if updatable
+        if ($sharedProjectTimesheet->getShareKey() === null) {
+            throw new \InvalidArgumentException("Cannot update shared project timesheet with share key equals null");
+        }
+
+        // Ensure project
+        if (!($sharedProjectTimesheet->getProject() instanceof Project)) {
+            throw new \InvalidArgumentException("Project of shared project timesheet is not an instance of App\Entity\Project");
+        }
+
         // Handle password
         $currentHashedPassword = $sharedProjectTimesheet !== null && !empty($sharedProjectTimesheet->getPassword()) ? $sharedProjectTimesheet->getPassword() : null;
 
@@ -99,6 +99,7 @@ class ManageService
         }
 
         $this->sharedProjectTimesheetRepository->save($sharedProjectTimesheet);
+        return $sharedProjectTimesheet;
     }
 
     /**
