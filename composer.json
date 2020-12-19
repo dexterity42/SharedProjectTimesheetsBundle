@@ -27,11 +27,7 @@
     "require-dev": {
         "kevinpapst/kimai2": "^1.10",
         "phpunit/phpunit": "^8.0",
-        "phpstan/phpstan": "^0.12",
-        "symfony/phpunit-bridge": "^4.4",
-        "phpstan/phpstan-doctrine": "^0.12",
-        "phpstan/phpstan-phpunit": "^0.12",
-        "phpstan/phpstan-symfony": "^0.12"
+        "symfony/phpunit-bridge": "^4.4"
     },
     "scripts": {
         "test": "phpunit tests/"

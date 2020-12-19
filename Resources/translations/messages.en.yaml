@@ -29,7 +29,7 @@ shared_project_timesheets:
 
     view:
         title: Timesheet of project
-        selection_text: Showing time records of
+        selection_title: Month selection
         month:
             1: January
             2: February
@@ -44,6 +44,7 @@ shared_project_timesheets:
             11: November
             12: December
         table:
+            title: Details
             date: Date
             description: Description
             duration: Duration
@@ -60,6 +61,8 @@ shared_project_timesheets:
         error:
             title: An error occurred
             access_denied: Access denied.
+        chart:
+            per_month_title: Hours per month in %year%
 
     model:
         merge_record_mode:

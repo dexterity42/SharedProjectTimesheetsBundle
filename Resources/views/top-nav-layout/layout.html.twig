@@ -69,6 +69,7 @@ skin-blue, skin-black, skin-purple, skin-yellow, skin-red, skin-green
     </header>
 
     <div class="content-wrapper">
+        {% block content_header %}
         <section class="content-header">
             <h1>
                 {% block page_title %}{{ 'Admin LTE'|trans({}, 'AdminLTEBundle') }}{% endblock %}
@@ -83,6 +84,7 @@ skin-blue, skin-black, skin-purple, skin-yellow, skin-red, skin-green
                 {% endif %}
             {% endblock %}
         </section>
+        {% endblock %}
 
         {% block page_content_before %}{% endblock %}
 

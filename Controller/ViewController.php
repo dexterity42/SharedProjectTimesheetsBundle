@@ -100,6 +100,8 @@ class ViewController extends AbstractController
             $currency = $customer->getCurrency();
         }
 
+        $statsPerMonth = $this->viewService->getStatsPerMonth($sharedProject, $year);
+
         return $this->render(
             '@SharedProjectTimesheets/view/timesheet.html.twig',
             [
@@ -110,6 +112,7 @@ class ViewController extends AbstractController
                 'year' => $year,
                 'month' => $month,
                 'currency' => $currency,
+                'statsPerMonth' => $statsPerMonth,
             ]
         );
     }
