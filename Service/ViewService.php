@@ -192,6 +192,7 @@ class ViewService
             }
         }
 
+        ksort($stats);
         return $stats;
     }
 
@@ -240,6 +241,7 @@ class ViewService
             }
         }
 
+        ksort($stats);
         return $stats;
     }
 
