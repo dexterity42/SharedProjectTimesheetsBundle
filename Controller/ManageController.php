@@ -14,6 +14,7 @@ use Doctrine\ORM\OptimisticLockException;
 use Doctrine\ORM\ORMException;
 use KimaiPlugin\SharedProjectTimesheetsBundle\Entity\SharedProjectTimesheet;
 use KimaiPlugin\SharedProjectTimesheetsBundle\Form\SharedProjectFormType;
+use KimaiPlugin\SharedProjectTimesheetsBundle\Model\RecordMergeMode;
 use KimaiPlugin\SharedProjectTimesheetsBundle\Repository\SharedProjectTimesheetRepository;
 use KimaiPlugin\SharedProjectTimesheetsBundle\Service\ManageService;
 use Sensio\Bundle\FrameworkExtraBundle\Configuration\Security;
@@ -70,6 +71,11 @@ class ManageController extends AbstractController
             '@SharedProjectTimesheets/manage/index.html.twig',
             [
                 'sharedProjects' => $sharedProjects,
+                'mergeModeNone' => RecordMergeMode::MODE_NONE,
+                'mergeModeMerge' => RecordMergeMode::MODE_MERGE,
+                'mergeModeUseFirst' => RecordMergeMode::MODE_MERGE_USE_FIRST_OF_DAY,
+                'mergeModeUseLast' => RecordMergeMode::MODE_MERGE_USE_LAST_OF_DAY,
+                'RecordMergeMode' => RecordMergeMode::getModes(),
             ]
         );
     }

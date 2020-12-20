@@ -16,6 +16,7 @@ use KimaiPlugin\SharedProjectTimesheetsBundle\Service\ManageService;
 use Symfony\Component\Form\AbstractType;
 use Symfony\Component\Form\Extension\Core\Type\CheckboxType;
 use Symfony\Component\Form\Extension\Core\Type\ChoiceType;
+use Symfony\Component\Form\Extension\Core\Type\FormType;
 use Symfony\Component\Form\Extension\Core\Type\PasswordType;
 use Symfony\Component\Form\Extension\Core\Type\SubmitType;
 use Symfony\Component\Form\FormBuilderInterface;
@@ -46,14 +47,38 @@ class SharedProjectFormType extends AbstractType
                 'mapped' => false,
                 'help' => 'shared_project_timesheets.manage.form.password_hint',
             ])
-            ->add('entryUserVisible', CheckboxType::class, [
-                'label' => 'shared_project_timesheets.manage.form.entry_user_visible',
-                'required' => false,
-            ])
-            ->add('entryRateVisible', CheckboxType::class, [
-                'label' => 'shared_project_timesheets.manage.form.entry_rate_visible',
-                'required' => false,
-            ])
+            ->add(
+                $builder
+                    ->create('tableOptions', FormType::class, [
+                        'label' => 'shared_project_timesheets.manage.form.table_options',
+                        'inherit_data' => true,
+                        'required' => false,
+                    ])
+                    ->add('entryUserVisible', CheckboxType::class, [
+                        'label' => 'shared_project_timesheets.manage.form.entry_user_visible',
+                        'required' => false,
+                    ])
+                    ->add('entryRateVisible', CheckboxType::class, [
+                        'label' => 'shared_project_timesheets.manage.form.entry_rate_visible',
+                        'required' => false,
+                    ])
+            )
+            ->add(
+                $builder
+                    ->create('chartOptions', FormType::class, [
+                        'label' => 'shared_project_timesheets.manage.form.chart_options',
+                        'inherit_data' => true,
+                        'required' => false,
+                    ])
+                    ->add('annualChartVisible', CheckboxType::class, [
+                        'label' => 'shared_project_timesheets.manage.form.annual_chart_visible',
+                        'required' => false,
+                    ])
+                    ->add('monthlyChartVisible', CheckboxType::class, [
+                        'label' => 'shared_project_timesheets.manage.form.monthly_chart_visible',
+                        'required' => false,
+                    ])
+            )
             ->add('save', SubmitType::class, [
                 'label' => 'action.save',
             ]);

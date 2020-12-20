@@ -10,7 +10,7 @@
 namespace KimaiPlugin\SharedProjectTimesheetsBundle\Model;
 
 
-class MonthStats
+class ChartStat
 {
 
     /**
