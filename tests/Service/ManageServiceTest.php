@@ -42,7 +42,9 @@ class ManageServiceTest extends TestCase
             ->setProject(new Project())
             ->setRecordMergeMode(RecordMergeMode::MODE_MERGE)
             ->setEntryUserVisible(true)
-            ->setEntryRateVisible(true);
+            ->setEntryRateVisible(true)
+            ->setAnnualChartVisible(true)
+            ->setMonthlyChartVisible(true);
 
         $saved = $this->service->create($sharedProjectTimesheet);
 
@@ -52,6 +54,20 @@ class ManageServiceTest extends TestCase
         self::assertEquals(RecordMergeMode::MODE_MERGE, $saved->getRecordMergeMode());
         self::assertTrue($saved->isEntryUserVisible());
         self::assertTrue($saved->isEntryRateVisible());
+        self::assertTrue($saved->isAnnualChartVisible());
+        self::assertTrue($saved->isMonthlyChartVisible());
+    }
+    public function testDefaultValues(): void
+    {
+        $sharedProjectTimesheet = new SharedProjectTimesheet();
+        self::assertNull($sharedProjectTimesheet->getShareKey());
+        self::assertNull($sharedProjectTimesheet->getProject());
+        self::assertNull($sharedProjectTimesheet->getPassword());
+        self::assertEquals(RecordMergeMode::MODE_NONE, $sharedProjectTimesheet->getRecordMergeMode());
+        self::assertFalse($sharedProjectTimesheet->isEntryUserVisible());
+        self::assertFalse($sharedProjectTimesheet->isEntryRateVisible());
+        self::assertFalse($sharedProjectTimesheet->isAnnualChartVisible());
+        self::assertFalse($sharedProjectTimesheet->isMonthlyChartVisible());
     }
 
     public function testCreatePassword(): void
@@ -78,7 +94,9 @@ class ManageServiceTest extends TestCase
             ->setPassword("password")
             ->setRecordMergeMode(RecordMergeMode::MODE_MERGE)
             ->setEntryUserVisible(true)
-            ->setEntryRateVisible(true);
+            ->setEntryRateVisible(true)
+            ->setAnnualChartVisible(true)
+            ->setMonthlyChartVisible(true);
 
         $saved = $this->service->update($sharedProjectTimesheet, "newPassword");
 
@@ -88,6 +106,8 @@ class ManageServiceTest extends TestCase
         self::assertEquals(RecordMergeMode::MODE_MERGE, $saved->getRecordMergeMode());
         self::assertTrue($saved->isEntryUserVisible());
         self::assertTrue($saved->isEntryRateVisible());
+        self::assertTrue($saved->isAnnualChartVisible());
+        self::assertTrue($saved->isMonthlyChartVisible());
     }
 
     public function testUpdatePasswordDoesNotChange(): void

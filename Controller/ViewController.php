@@ -53,6 +53,13 @@ class ViewController extends AbstractController
      */
     public function indexAction(string $projectId, string $shareKey, Request $request)
     {
+        // Receive parameters.
+        $givenPassword = $request->get('spt-password');
+        $year = (int)$request->get('year', date('Y'));
+        $month = (int)$request->get('month', date('m'));
+        $detailsMode = $request->get('details', 'table');
+
+        // Get project.
         $sharedProject = $this->sharedProjectTimesheetRepository->findByProjectAndShareKey(
             $projectId,
             $shareKey
@@ -69,9 +76,7 @@ class ViewController extends AbstractController
             );
         }
 
-        // Check password if set.
-        $givenPassword = $request->get("spt-password", null);
-
+        // Check access.
         if (!$this->viewService->hasAccess($sharedProject, $givenPassword)) {
             return $this->render(
                 '@SharedProjectTimesheets/view/auth.html.twig',
@@ -82,11 +87,10 @@ class ViewController extends AbstractController
             );
         }
 
-        $year = (int)$request->get("year", date('Y'));
-        $month = (int)$request->get("month", date('m'));
-
+        // Get time records.
         $timeRecords = $this->viewService->getTimeRecords($sharedProject, $year, $month);
 
+        // Calculate summary.
         $rateSum = 0;
         $durationSum = 0;
         foreach($timeRecords as $record) {
@@ -94,11 +98,20 @@ class ViewController extends AbstractController
             $durationSum += $record->getDuration();
         }
 
+        // Define currency.
         $currency = 'EUR';
         $customer = $sharedProject->getProject()->getCustomer();
         if ( $customer !== null ) {
             $currency = $customer->getCurrency();
         }
+
+        // Prepare stats for charts.
+        $annualChartVisible = $sharedProject->isAnnualChartVisible();
+        $monthlyChartVisible = $sharedProject->isMonthlyChartVisible();
+
+        $statsPerMonth = $annualChartVisible ? $this->viewService->getAnnualStats($sharedProject, $year) : null;
+        $statsPerDay = ($monthlyChartVisible && $detailsMode === 'chart')
+            ? $this->viewService->getMonthlyStats($sharedProject, $year, $month) : null;
 
         return $this->render(
             '@SharedProjectTimesheets/view/timesheet.html.twig',
@@ -110,6 +123,10 @@ class ViewController extends AbstractController
                 'year' => $year,
                 'month' => $month,
                 'currency' => $currency,
+                'statsPerMonth' => $statsPerMonth,
+                'monthlyChartVisible' => $monthlyChartVisible,
+                'statsPerDay' => $statsPerDay,
+                'detailsMode' => $detailsMode,
             ]
         );
     }

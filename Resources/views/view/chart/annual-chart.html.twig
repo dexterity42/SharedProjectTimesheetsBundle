@@ -1,0 +1,62 @@
+{% set chartId = 'statsPerMonthChart' %}
+{% set backgroundColor = kimai_context.chart.background_color %}
+{% set gridColor = kimai_context.chart.grid_color %}
+
+<div class="chart">
+    <canvas id="{{ chartId }}" style="height: {{ kimai_context.chart.height }}px;"></canvas>
+</div>
+
+<script type="text/javascript">
+    new Chart(document.getElementById('{{ chartId }}').getContext('2d'), {
+        type: 'bar',
+        data: {
+            labels: [
+                {% for i in 1..12 %}
+                '{{ ('shared_project_timesheets.view.month.' ~ i) | trans }}',
+                {% endfor %}
+            ],
+            datasets: [{
+                label: '{{ 'shared_project_timesheets.view.table.duration' | trans }}',
+                backgroundColor: '{{ backgroundColor }}',
+                data: [
+                    {% for i in 1..12 %}
+                    {{ (statsPerMonth[i].duration / 3600) | number_format(2, '.', '') }},
+                    {% endfor %}
+                ],
+                realData: [
+                    {% for i in 1..12 %}
+                    '{{ statsPerMonth[i].duration | duration }}',
+                    {% endfor %}
+                ]
+            }]
+        },
+        options: {
+            maintainAspectRatio: true,
+            responsive: true,
+            legend: false,
+            scales: {
+                yAxes: [{
+                    scaleLabel: {
+                        display: true,
+                        labelString: '{{ 'shared_project_timesheets.view.table.duration' | trans }}',
+                    },
+                    ticks: {
+                        beginAtZero: true
+                    },
+                    gridLines: {
+                        display: true,
+                        color: '{{ gridColor }}',
+                        lineWidth: 1
+                    }
+                }],
+            },
+            tooltips: {
+                callbacks: {
+                    label: function (tooltipItem, data) {
+                        return data.datasets[tooltipItem.datasetIndex].realData[tooltipItem.index];
+                    }
+                }
+            },
+        },
+    });
+</script>

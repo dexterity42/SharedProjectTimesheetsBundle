@@ -80,7 +80,21 @@ class SharedProjectTimesheet
      * @ORM\Column(name="record_merge_mode", type="string", length=50, nullable=false)
      * @Assert\Length(max=50)
      */
-    protected $recordMergeMode = RecordMergeMode::MODE_MERGE;
+    protected $recordMergeMode = RecordMergeMode::MODE_NONE;
+
+    /**
+     * @var boolean
+     *
+     * @ORM\Column(name="annual_chart_visible", type="boolean", nullable=false)
+     */
+    protected $annualChartVisible = false;
+
+    /**
+     * @var boolean
+     *
+     * @ORM\Column(name="monthly_chart_visible", type="boolean", nullable=false)
+     */
+    protected $monthlyChartVisible = false;
 
     /**
      * @return Project
@@ -191,6 +205,44 @@ class SharedProjectTimesheet
     public function setRecordMergeMode(string $recordMergeMode): SharedProjectTimesheet
     {
         $this->recordMergeMode = $recordMergeMode;
+
+        return $this;
+    }
+
+    /**
+     * @return bool
+     */
+    public function isAnnualChartVisible(): bool
+    {
+        return $this->annualChartVisible;
+    }
+
+    /**
+     * @param bool $annualChartVisible
+     * @return SharedProjectTimesheet
+     */
+    public function setAnnualChartVisible(bool $annualChartVisible): SharedProjectTimesheet
+    {
+        $this->annualChartVisible = $annualChartVisible;
+
+        return $this;
+    }
+
+    /**
+     * @return bool
+     */
+    public function isMonthlyChartVisible(): bool
+    {
+        return $this->monthlyChartVisible;
+    }
+
+    /**
+     * @param bool $monthlyChartVisible
+     * @return SharedProjectTimesheet
+     */
+    public function setMonthlyChartVisible(bool $monthlyChartVisible): SharedProjectTimesheet
+    {
+        $this->monthlyChartVisible = $monthlyChartVisible;
 
         return $this;
     }

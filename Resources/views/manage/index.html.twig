@@ -7,8 +7,11 @@
     'name': {'class': 'alwaysVisible'},
     'url': {'class': 'alwaysVisible'},
     'password': {'class': 'hidden-xs hidden-sm text-center'},
+    'record_merge_mode': {'class': 'hidden-xs hidden-sm text-center'},
     'entry_user_visible': {'class': 'hidden-xs hidden-sm text-center'},
     'entry_rate_visible': {'class': 'hidden-xs hidden-sm text-center'},
+    'annual_chart_visible': {'class': 'hidden-xs hidden-sm text-center'},
+    'monthly_chart_visible': {'class': 'hidden-xs hidden-sm text-center'},
     'actions': {'class': 'hidden-xs hidden-sm'},
 } %}
 
@@ -41,14 +44,30 @@
                     -
                 {% endif %}
             </td>
-            <td class="{{ tables.data_table_column_class(tableName, columns, 'password') }}"><i
-                        class="{{ sharedProject.password ? "fa fa-check-circle" : "far fa-circle" }}"></i>
+            <td class="{{ tables.data_table_column_class(tableName, columns, 'password') }}">
+                <i class="{{ sharedProject.password ? "fa fa-check-circle" : "far fa-circle" }}"></i>
             </td>
-            <td class="{{ tables.data_table_column_class(tableName, columns, 'entry_user_visible') }}"><i
-                        class="{{ sharedProject.entryUserVisible ? "fa fa-check-circle" : "far fa-circle" }}"></i>
+            <td class="{{ tables.data_table_column_class(tableName, columns, 'record_merge_mode') }}" title="{{ RecordMergeMode[sharedProject.recordMergeMode] | trans }}">
+                <i class="{{ sharedProject.recordMergeMode != mergeModeNone ? "fa fa-check-circle" : "far fa-circle" }}"></i>
+                {% if sharedProject.recordMergeMode == mergeModeMerge %}
+                    <i class="fa fa-compress-alt"></i>
+                {% else %}
+                    {% if sharedProject.recordMergeMode != mergeModeNone %}
+                        <i class="fa fa-fast-forward fa-{% if sharedProject.recordMergeMode == mergeModeUseLast %}rotate-90{% else %}rotate-270{% endif %}"></i>
+                    {% endif %}
+                {% endif %}
             </td>
-            <td class="{{ tables.data_table_column_class(tableName, columns, 'entry_rate_visible') }}"><i
-                        class="{{ sharedProject.entryRateVisible ? "fa fa-check-circle" : "far fa-circle" }}"></i>
+            <td class="{{ tables.data_table_column_class(tableName, columns, 'entry_user_visible') }}">
+                <i class="{{ sharedProject.entryUserVisible ? "fa fa-check-circle" : "far fa-circle" }}"></i>
+            </td>
+            <td class="{{ tables.data_table_column_class(tableName, columns, 'entry_rate_visible') }}">
+                <i class="{{ sharedProject.entryRateVisible ? "fa fa-check-circle" : "far fa-circle" }}"></i>
+            </td>
+            <td class="{{ tables.data_table_column_class(tableName, columns, 'annual_chart_visible') }}">
+                <i class="{{ sharedProject.annualChartVisible ? "fa fa-check-circle" : "far fa-circle" }}"></i>
+            </td>
+            <td class="{{ tables.data_table_column_class(tableName, columns, 'monthly_chart_visible') }}">
+                <i class="{{ sharedProject.monthlyChartVisible ? "fa fa-check-circle" : "far fa-circle" }}"></i>
             </td>
             <td class="{{ tables.data_table_column_class(tableName, columns, 'actions') }}">{{ actions.removeSharedProject(sharedProject, 'index') }}</td>
         </tr>

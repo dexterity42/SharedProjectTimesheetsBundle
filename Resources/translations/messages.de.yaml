@@ -14,22 +14,29 @@ shared_project_timesheets:
             project: Projekt
             record_merge_mode: Zeiten eines Tages zusammenführen
             password_hint: Feld leer lassen um kein Passwort festzulegen
+            table_options: Detailtabelle - Optionen
             entry_user_visible: Benutzer sichtbar
             entry_rate_visible: Kosten sichtbar
+            chart_options: Diagramme - Optionen
+            annual_chart_visible: Jahresdiagramm sichtbar
+            monthly_chart_visible: Monatsdiagramm sichtbar
         table:
             name: Name des Projekts
-            password: Passwortgeschützt
             url: Link
+            password: Passwortgeschützt
             record_merge_mode: Zeiten zusammenführen
             entry_user_visible: Benutzer sichtbar
             entry_rate_visible: Kosten sichtbar
+            annual_chart_visible: Jahresdiagramm sichtbar
+            monthly_chart_visible: Monatsdiagramm sichtbar
         persist:
             success: Erfolgreich gespeichert.
             error: Speichern fehlgeschlagen. Bitte versuchen Sie es erneut.
 
     view:
-        title: Zeiten des Projektes
-        selection_text: Zeige Zeiten von
+        title: "Projekt:"
+        subtitle: "- geteilte Projektzeiten"
+        selection_title: Monat auswählen
         month:
             1: Januar
             2: Februar
@@ -44,6 +51,7 @@ shared_project_timesheets:
             11: November
             12: Dezember
         table:
+            title: Details
             date: Datum
             description: Beschreibung
             duration: Dauer
@@ -60,6 +68,11 @@ shared_project_timesheets:
         error:
             title: Ein Fehler ist aufgetreten
             access_denied: Zugriff verweigert.
+        chart:
+            per_month_title: Stunden pro Monat im Jahr %year%
+        details:
+            table: Tabelle
+            chart: Diagramm
 
     model:
         merge_record_mode:

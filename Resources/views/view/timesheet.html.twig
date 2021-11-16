@@ -1,35 +1,126 @@
 {% extends '@SharedProjectTimesheets/top-nav-layout/base.html.twig' %}
 
 {% block page_title %}{{ 'shared_project_timesheets.view.title' | trans }} {{ sharedProject.project.name }}{% endblock %}
-{% block page_subtitle %}{% endblock %}
+{% block page_subtitle %}{{ 'shared_project_timesheets.view.subtitle' | trans }}{% endblock %}
+
+{% block stylesheets %}
+    {{ parent() }}
+    {{ encore_entry_link_tags('chart') }}
+    <style type="text/css">
+        .select-container {
+            display: flex;
+        }
+
+        .select-container > .flex {
+            flex: 1;
+        }
+    </style>
+{% endblock %}
+
+{% block head %}
+    {{ parent() }}
+    {{ encore_entry_script_tags('chart') }}
+{% endblock %}
 
 {% block main %}
-    <div class="box box-default">
-        <div class="box-body">
-            {{ 'shared_project_timesheets.view.selection_text' | trans }}
-            <div class="btn-group">
-                <button type="button" class="btn btn-default dropdown-toggle" data-toggle="dropdown"
-                        aria-haspopup="true" aria-expanded="false">{{ ('shared_project_timesheets.view.month.' ~ month) | trans }} <span class="caret"></span></button>
-                <ul class="dropdown-menu">
-                    {% for i in 1..12 %}
-                    <li><a href="{{ app.request.pathinfo }}?year={{ year }}&month={{ i }}" class="{{ i == month ? 'active' : '' }}">{{ ('shared_project_timesheets.view.month.' ~ i) | trans }}</a></li>
-                    {% endfor %}
-                </ul>
-            </div>
-            <div class="btn-group">
-                <button type="button" class="btn btn-default dropdown-toggle" data-toggle="dropdown"
-                        aria-haspopup="true" aria-expanded="false">{{ year }} <span class="caret"></span></button>
-                <ul class="dropdown-menu">
-                    {% for i in (year - 2)..(year + 2) %}
-                        <li><a href="{{ app.request.pathinfo }}?year={{ i }}&month={{ month }}" class="{{ i == year ? 'active' : '' }}"> {{ i }} </a></li>
-                    {% endfor %}
-                </ul>
+    <div class="row">
+        <div class="col-md-4">
+            <div class="box box-default">
+                <div class="box-header with-border">
+                    <h3 class="box-title">{{ 'shared_project_timesheets.view.selection_title' | trans }}</h3>
+                </div>
+                <div class="box-body">
+                    <div class="row">
+                        <div class="col-sm-6">
+                            <div class="btn-group select-container">
+                                <a class="btn btn-default{% if month <= 1 %} disabled{% endif %}"
+                                   {% if month > 1 %}href="{{ app.request.pathinfo }}?year={{ year }}&month={{ month - 1 }}{% if detailsMode != 'table' %}&details={{ detailsMode }}{% endif %}"{% endif %}>
+                                    <i class="fa fa-caret-left"></i>
+                                </a>
+                                <div class="btn-group flex select-container">
+                                    <button type="button" class="btn btn-default flex dropdown-toggle" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+                                        {{ ('shared_project_timesheets.view.month.' ~ month) | trans }}
+                                    </button>
+                                    <button type="button" class="btn btn-default dropdown-toggle" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+                                        <span class="caret"></span>
+                                    </button>
+                                    <ul class="dropdown-menu flex">
+                                        {% for i in 1..12 %}
+                                            <li{% if i == month %} class="active"{% endif %}>
+                                                <a href="{{ app.request.pathinfo }}?year={{ year }}&month={{ i }}{% if detailsMode != 'table' %}&details={{ detailsMode }}{% endif %}"
+                                                   class="{{ i == month ? 'active' : '' }}">{{ ('shared_project_timesheets.view.month.' ~ i) | trans }}</a>
+                                            </li>
+                                        {% endfor %}
+                                    </ul>
+                                </div>
+                                <a class="btn btn-default{% if month >= 12 %} disabled{% endif %}"
+                                   {% if month < 12 %}href="{{ app.request.pathinfo }}?year={{ year }}&month={{ month + 1 }}{% if detailsMode != 'table' %}&details={{ detailsMode }}{% endif %}"{% endif %}>
+                                    <i class="fa fa-caret-right"></i>
+                                </a>
+                            </div>
+                        </div>
+                        <div class="col-sm-6">
+                            <div class="btn-group select-container">
+                                <a class="btn btn-default" href="{{ app.request.pathinfo }}?year={{ year - 1 }}&month={{ month }}{% if detailsMode != 'table' %}&details={{ detailsMode }}{% endif %}">
+                                    <i class="fa fa-caret-left"></i>
+                                </a>
+                                <div class="btn-group flex select-container">
+                                    <button type="button" class="btn btn-default flex dropdown-toggle" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+                                        {{ year }}
+                                    </button>
+                                    <button type="button" class="btn btn-default dropdown-toggle" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+                                        <span class="caret"></span>
+                                    </button>
+                                    <ul class="dropdown-menu flex">
+                                        {% for i in (year - 5)..(year + 5) %}
+                                            <li{% if i == year %} class="active"{% endif %}>
+                                                <a href="{{ app.request.pathinfo }}?year={{ i }}&month={{ month }}{% if detailsMode != 'table' %}&details={{ detailsMode }}{% endif %}"
+                                                   class="{{ i == year ? 'active' : '' }}"> {{ i }} </a>
+                                            </li>
+                                        {% endfor %}
+                                    </ul>
+                                </div>
+                                <a class="btn btn-default" href="{{ app.request.pathinfo }}?year={{ year + 1 }}&month={{ month }}{% if detailsMode != 'table' %}&details={{ detailsMode }}{% endif %}">
+                                    <i class="fa fa-caret-right"></i>
+                                </a>
+                            </div>
+                        </div>
+                    </div>
+                </div>
             </div>
         </div>
+        {% if statsPerMonth != null %}
+        <div class="col-md-8">
+            <div class="box box-default">
+                <div class="box-header with-border">
+                    <h3 class="box-title">{{ 'shared_project_timesheets.view.chart.per_month_title' | trans({'%year%': year}) }}</h3>
+                </div>
+                <div class="box-body">
+                    {% include '@SharedProjectTimesheets/view/chart/annual-chart.html.twig' with {year: year, month: month, statsPerMonth: statsPerMonth} %}
+                </div>
+            </div>
+        </div>
+        {% endif %}
     </div>
 
     <div class="box box-default">
+        <div class="box-header with-border">
+            <h3 class="box-title{% if monthlyChartVisible %} pull-left{% endif %}">{{ 'shared_project_timesheets.view.table.title' | trans }}</h3>
+            {% if monthlyChartVisible %}
+            <div class="btn-group pull-right">
+                <a href="{{ app.request.pathinfo }}?year={{ year }}&month={{ month }}" class="btn btn-default btn-sm">
+                    <i class="fa fa-table"></i>
+                    {{ 'shared_project_timesheets.view.details.table' | trans }}
+                </a>
+                <a href="{{ app.request.pathinfo }}?year={{ year }}&month={{ month }}&details=chart" class="btn btn-default btn-sm">
+                    <i class="fa fa-chart-bar"></i>
+                    {{ 'shared_project_timesheets.view.details.chart' | trans }}
+                </a>
+            </div>
+            {% endif %}
+        </div>
         <div class="box-body no-padding">
+            {% if statsPerDay == null %}
             <table class="table table-striped table-hover">
                 <thead>
                     <tr>
@@ -84,6 +175,10 @@
                 </tfoot>
                 {% endif %}
             </table>
+            {% else %}
+                {% include '@SharedProjectTimesheets/view/chart/monthly-chart.html.twig' with {year: year, month: month, statsPerDay: statsPerDay} %}
+            {% endif %}
+
             {% if timeRecords is empty %}
                 <p class="margin">{{ 'shared_project_timesheets.view.table.empty' | trans }}</p>
             {% endif %}

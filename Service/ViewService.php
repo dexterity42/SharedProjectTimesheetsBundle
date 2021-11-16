@@ -16,6 +16,7 @@ use App\Repository\TimesheetRepository;
 use DateInterval;
 use DateTime;
 use KimaiPlugin\SharedProjectTimesheetsBundle\Entity\SharedProjectTimesheet;
+use KimaiPlugin\SharedProjectTimesheetsBundle\Model\ChartStat;
 use KimaiPlugin\SharedProjectTimesheetsBundle\Model\RecordMergeMode;
 use KimaiPlugin\SharedProjectTimesheetsBundle\Model\TimeRecord;
 use Symfony\Component\HttpFoundation\Session\SessionInterface;
@@ -54,6 +55,7 @@ class ViewService
     }
 
     /**
+     * Check if the user has access to the given shared project timesheet.
      * @param SharedProjectTimesheet $sharedProject
      * @param $givenPassword
      * @return bool
@@ -84,6 +86,7 @@ class ViewService
     }
 
     /**
+     * Delivers time records for the given shared project timesheet and time span.
      * @param SharedProjectTimesheet $sharedProject
      * @param int $year
      * @param int $month
@@ -148,6 +151,98 @@ class ViewService
         }
 
         return $flattenedTimeRecords;
+    }
+
+    /**
+     * Delivers stats for the given year (e.g. duration per month).
+     * @param SharedProjectTimesheet $sharedProject
+     * @param int $year
+     * @return ChartStat[] stats per month, one-based index (1 - 12)
+     *
+     * @todo Unit test
+     */
+    public function getAnnualStats(SharedProjectTimesheet $sharedProject, int $year): array
+    {
+        $result = $this->timesheetRepository->createQueryBuilder('t')
+            ->select([
+                'YEAR(t.begin) as year',
+                'MONTH(t.begin) as month',
+                'SUM(t.duration) as duration',
+                'SUM(t.rate) as rate',
+            ])
+            ->where('t.project = :project')
+            ->andWhere('YEAR(t.begin) = :year')
+            ->groupBy('year')
+            ->addGroupBy('month')
+            ->setParameters([
+                'project' => $sharedProject->getProject(),
+                'year' => $year,
+            ])
+            ->getQuery()
+            ->getArrayResult();
+
+        $stats = [];
+        foreach ($result as $row) {
+            $stats[(int) $row['month']] = new ChartStat($row);
+        }
+
+        for ($i = 1; $i <= 12; $i++) {
+            if (!isset($stats[$i])) {
+                $stats[$i] = new ChartStat();
+            }
+        }
+
+        ksort($stats);
+        return $stats;
+    }
+
+    /**
+     * Delivers stats for the given month (e.g. duration per day).
+     * @param SharedProjectTimesheet $sharedProject
+     * @param int $year
+     * @param int $month
+     * @return ChartStat[] stats per day
+     *
+     * @todo Unit test
+     */
+    public function getMonthlyStats(SharedProjectTimesheet $sharedProject, int $year, int $month): array
+    {
+        $result = $this->timesheetRepository->createQueryBuilder('t')
+            ->select([
+                'YEAR(t.begin) as year',
+                'MONTH(t.begin) as month',
+                'DAY(t.begin) as day',
+                'SUM(t.duration) as duration',
+                'SUM(t.rate) as rate',
+            ])
+            ->where('t.project = :project')
+            ->andWhere('YEAR(t.begin) = :year')
+            ->andWhere('MONTH(t.begin) = :month')
+            ->groupBy('year')
+            ->addGroupBy('month')
+            ->addGroupBy('day')
+            ->setParameters([
+                'project' => $sharedProject->getProject(),
+                'year' => $year,
+                'month' => $month
+            ])
+            ->getQuery()
+            ->getArrayResult();
+
+        $stats = [];
+        foreach ($result as $row) {
+            $stats[(int) $row['day']] = new ChartStat($row);
+        }
+
+        $numberOfDays = date('t', (new DateTime("$year-$month-01"))->getTimestamp());
+        for ($i = 1; $i <= $numberOfDays; $i++) {
+            if (!isset($stats[$i])) {
+                $stats[$i] = new ChartStat();
+            }
+        }
+
+        ksort($stats);
+        return $stats;
     }
 
 }
