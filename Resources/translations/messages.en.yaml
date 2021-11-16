@@ -14,8 +14,10 @@ shared_project_timesheets:
             project: Project
             record_merge_mode: Merge records of one day
             password_hint: Leave empty to set no password
+            table_options: Timesheet table options
             entry_user_visible: Entry user visible
             entry_rate_visible: Entry rate visible
+            chart_options: Chart options
             annual_chart_visible: Annual chart visible
             monthly_chart_visible: Monthly chart visible
         table:
