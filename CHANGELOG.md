@@ -1,5 +1,12 @@
 # Changelog
 
+## 2.0.0
+
+- Added charts to public shared timesheet view #7, #8
+- Fixed db migration compatibility bug #19
+
+Compatible with Kimai 1.15+
+
 ## 1.0.0
 
 - Initial version
