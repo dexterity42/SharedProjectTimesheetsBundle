@@ -6,7 +6,5 @@
 # bin/console kimai:bundle:shared-project-timesheets:install
 # --------------------------------------------------------------------------------------------------
 
-name: SharedProjectTimesheetsMigrations
-table_name: bundle_migration_shared_project_timesheets
-migrations_namespace: KimaiPlugin\SharedProjectTimesheetsBundle\Migrations
-migrations_directory: var/plugins/SharedProjectTimesheetsBundle/Migrations
+migrations_paths:
+  KimaiPlugin\SharedProjectTimesheetsBundle\Migrations: var/plugins/SharedProjectTimesheetsBundle/Migrations
