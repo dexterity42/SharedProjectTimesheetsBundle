@@ -1,5 +1,9 @@
 # Changelog
 
+## 2.0.1
+
+- Added missing translations
+
 ## 2.0.0
 
 - Added charts to public shared timesheet view #7, #8
