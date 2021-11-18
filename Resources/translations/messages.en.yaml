@@ -4,6 +4,9 @@ shared_project_timesheets:
 
     manage:
         title: Shared project timesheets
+        open: Open
+        copy: Copy
+        copied: Copied
         subtitle: Manage your shared project timesheets
         create_link_label: Create an entry to share your project timesheets
         create:
