@@ -1,5 +1,9 @@
 # Changelog
 
+## 2.1.0
+
+- Reworked options to open and copy link #17
+
 ## 2.0.1
 
 - Added missing translations
