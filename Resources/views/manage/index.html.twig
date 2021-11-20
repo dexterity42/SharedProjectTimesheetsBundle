@@ -33,13 +33,22 @@
             <td class="{{ tables.data_table_column_class(tableName, columns, 'name') }}">{{ sharedProject.project.name }}</td>
             <td class="{{ tables.data_table_column_class(tableName, columns, 'url') }}">
                 {% if sharedProject.shareKey %}
-                    <a href="{{ url('view_shared_project_timesheets', {projectId: sharedProject.project.id, shareKey: sharedProject.shareKey}) }}"
-                       target="_blank">
-                        <i class="fa fa-link"></i>
-                        <span class="hidden-xs hidden-sm hidden-md">
-                            {{ url('view_shared_project_timesheets', {projectId: sharedProject.project.id, shareKey: sharedProject.shareKey}) }}
-                        </span>
-                    </a>
+                    <div class="input-group">
+                        <a class="input-group-addon btn btn-sm btn-default"
+                           href="{{ url('view_shared_project_timesheets', {projectId: sharedProject.project.id, shareKey: sharedProject.shareKey}) }}"
+                           target="_blank">
+                            {{ 'shared_project_timesheets.manage.open' | trans }}
+                        </a>
+                        <input class="form-control input-sm hidden-xs hidden-sm hidden-md"
+                               id="url{{ sharedProject.shareKey }}"
+                               value="{{ url('view_shared_project_timesheets', {projectId: sharedProject.project.id, shareKey: sharedProject.shareKey}) }}"
+                               onclick="select()" readonly/>
+                        <a class="input-group-addon btn btn-sm btn-default copy-btn"
+                           id="btn{{ sharedProject.shareKey }}"
+                           data-clipboard-target="#url{{ sharedProject.shareKey }}">
+                            {{ 'shared_project_timesheets.manage.copy' | trans }}
+                        </a>
+                    </div>
                 {% else %}
                     -
                 {% endif %}
@@ -99,4 +108,39 @@
         padding-bottom: 1rem;
     }
 </style>
+{% endblock %}
+
+{% block javascripts %}
+{{ parent() }}
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/clipboard.js/2.0.8/clipboard.min.js"
+            integrity="sha512-sIqUEnRn31BgngPmHt2JenzleDDsXwYO+iyvQ46Mw6RL+udAUZj2n/u/PGY80NxRxynO7R9xIGx5LEzw4INWJQ=="
+            crossorigin="anonymous" referrerpolicy="no-referrer"></script>
+
+    <script type="text/javascript">
+        $(function() {
+            $('.copy-btn').tooltip({
+                trigger: 'manual',
+                placement: 'bottom',
+            });
+
+            var clipboard = new ClipboardJS('.copy-btn');
+            var clipboardTimeouts = {};
+            clipboard.on('success', function(e) {
+                var $el = $(e.trigger);
+                var id = $el.attr("id");
+
+                if (clipboardTimeouts[id]) {
+                    clearTimeout(clipboardTimeouts[id]);
+                    clipboardTimeouts[id] = undefined;
+                }
+
+                $el.attr('data-original-title', '{{ 'shared_project_timesheets.manage.copied' | trans }}')
+                    .tooltip('show');
+
+                clipboardTimeouts[id] = setTimeout(function() {
+                    $el.tooltip('hide');
+                }, 500);
+            });
+        });
+    </script>
 {% endblock %}
