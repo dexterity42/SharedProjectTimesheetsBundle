@@ -34,7 +34,7 @@
                         <div class="col-sm-6">
                             <div class="btn-group select-container">
                                 <a class="btn btn-default{% if month <= 1 %} disabled{% endif %}"
-                                   {% if month > 1 %}href="{{ app.request.pathinfo }}?year={{ year }}&month={{ month - 1 }}{% if detailsMode != 'table' %}&details={{ detailsMode }}{% endif %}"{% endif %}>
+                                   {% if month > 1 %}href="{{ url('view_shared_project_timesheets', {projectId: sharedProject.project.id, shareKey: sharedProject.shareKey}) }}?year={{ year }}&month={{ month - 1 }}{% if detailsMode != 'table' %}&details={{ detailsMode }}{% endif %}"{% endif %}>
                                     <i class="fa fa-caret-left"></i>
                                 </a>
                                 <div class="btn-group flex select-container">
@@ -47,21 +47,21 @@
                                     <ul class="dropdown-menu flex">
                                         {% for i in 1..12 %}
                                             <li{% if i == month %} class="active"{% endif %}>
-                                                <a href="{{ app.request.pathinfo }}?year={{ year }}&month={{ i }}{% if detailsMode != 'table' %}&details={{ detailsMode }}{% endif %}"
+                                                <a href="{{ url('view_shared_project_timesheets', {projectId: sharedProject.project.id, shareKey: sharedProject.shareKey}) }}?year={{ year }}&month={{ i }}{% if detailsMode != 'table' %}&details={{ detailsMode }}{% endif %}"
                                                    class="{{ i == month ? 'active' : '' }}">{{ ('shared_project_timesheets.view.month.' ~ i) | trans }}</a>
                                             </li>
                                         {% endfor %}
                                     </ul>
                                 </div>
                                 <a class="btn btn-default{% if month >= 12 %} disabled{% endif %}"
-                                   {% if month < 12 %}href="{{ app.request.pathinfo }}?year={{ year }}&month={{ month + 1 }}{% if detailsMode != 'table' %}&details={{ detailsMode }}{% endif %}"{% endif %}>
+                                   {% if month < 12 %}href="{{ url('view_shared_project_timesheets', {projectId: sharedProject.project.id, shareKey: sharedProject.shareKey}) }}?year={{ year }}&month={{ month + 1 }}{% if detailsMode != 'table' %}&details={{ detailsMode }}{% endif %}"{% endif %}>
                                     <i class="fa fa-caret-right"></i>
                                 </a>
                             </div>
                         </div>
                         <div class="col-sm-6">
                             <div class="btn-group select-container">
-                                <a class="btn btn-default" href="{{ app.request.pathinfo }}?year={{ year - 1 }}&month={{ month }}{% if detailsMode != 'table' %}&details={{ detailsMode }}{% endif %}">
+                                <a class="btn btn-default" href="{{ url('view_shared_project_timesheets', {projectId: sharedProject.project.id, shareKey: sharedProject.shareKey}) }}?year={{ year - 1 }}&month={{ month }}{% if detailsMode != 'table' %}&details={{ detailsMode }}{% endif %}">
                                     <i class="fa fa-caret-left"></i>
                                 </a>
                                 <div class="btn-group flex select-container">
@@ -74,13 +74,13 @@
                                     <ul class="dropdown-menu flex">
                                         {% for i in (year - 5)..(year + 5) %}
                                             <li{% if i == year %} class="active"{% endif %}>
-                                                <a href="{{ app.request.pathinfo }}?year={{ i }}&month={{ month }}{% if detailsMode != 'table' %}&details={{ detailsMode }}{% endif %}"
+                                                <a href="{{ url('view_shared_project_timesheets', {projectId: sharedProject.project.id, shareKey: sharedProject.shareKey}) }}?year={{ i }}&month={{ month }}{% if detailsMode != 'table' %}&details={{ detailsMode }}{% endif %}"
                                                    class="{{ i == year ? 'active' : '' }}"> {{ i }} </a>
                                             </li>
                                         {% endfor %}
                                     </ul>
                                 </div>
-                                <a class="btn btn-default" href="{{ app.request.pathinfo }}?year={{ year + 1 }}&month={{ month }}{% if detailsMode != 'table' %}&details={{ detailsMode }}{% endif %}">
+                                <a class="btn btn-default" href="{{ url('view_shared_project_timesheets', {projectId: sharedProject.project.id, shareKey: sharedProject.shareKey}) }}?year={{ year + 1 }}&month={{ month }}{% if detailsMode != 'table' %}&details={{ detailsMode }}{% endif %}">
                                     <i class="fa fa-caret-right"></i>
                                 </a>
                             </div>
@@ -108,11 +108,11 @@
             <h3 class="box-title{% if monthlyChartVisible %} pull-left{% endif %}">{{ 'shared_project_timesheets.view.table.title' | trans }}</h3>
             {% if monthlyChartVisible %}
             <div class="btn-group pull-right">
-                <a href="{{ app.request.pathinfo }}?year={{ year }}&month={{ month }}" class="btn btn-default btn-sm">
+                <a href="{{ url('view_shared_project_timesheets', {projectId: sharedProject.project.id, shareKey: sharedProject.shareKey}) }}?year={{ year }}&month={{ month }}" class="btn btn-default btn-sm">
                     <i class="fa fa-table"></i>
                     {{ 'shared_project_timesheets.view.details.table' | trans }}
                 </a>
-                <a href="{{ app.request.pathinfo }}?year={{ year }}&month={{ month }}&details=chart" class="btn btn-default btn-sm">
+                <a href="{{ url('view_shared_project_timesheets', {projectId: sharedProject.project.id, shareKey: sharedProject.shareKey}) }}?year={{ year }}&month={{ month }}&details=chart" class="btn btn-default btn-sm">
                     <i class="fa fa-chart-bar"></i>
                     {{ 'shared_project_timesheets.view.details.chart' | trans }}
                 </a>
