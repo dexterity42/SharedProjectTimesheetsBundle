@@ -1,0 +1,85 @@
+shared_project_timesheets:
+    menu:
+        title: Dijeljenje vremenskih tablica projekta
+
+    manage:
+        title: Dijeljenje vremenskih tablica projekta
+        open: Otvori
+        copy: Kopiraj
+        copied: Kopirano
+        subtitle: Upravljaj svojim dijeljenim vremenskim tablicama projekta
+        create_link_label: Za dijeljenje vremenskih tablica projekta stvori jedan unos
+        create:
+            subtitle: Stvori unos
+        update:
+            subtitle: Uredi unos
+        form:
+            project: Projekt
+            record_merge_mode: Sjedini zapise jednog dana
+            password_hint: Ostavi prazno za nepostavljanje lozinke
+            table_options: Opcije za vremenske tablice
+            entry_user_visible: Unos korisnika vidljiv
+            entry_rate_visible: Unos cijena vidljiv
+            chart_options: Opcije za dijagram
+            annual_chart_visible: Godišnji dijagram vidljiv
+            monthly_chart_visible: Mjesečni dijagram vidljiv
+        table:
+            name: Ime projekta
+            url: Poveznica
+            password: Zaštita lozinkom
+            record_merge_mode: Sjedini zapise
+            entry_user_visible: Unos korisnika vidljiv
+            entry_rate_visible: Unos cijena vidljiv
+            annual_chart_visible: Godišnji dijagram vidljiv
+            monthly_chart_visible: Mjesečni dijagram vidljiv
+        persist:
+            success: Uspješno spremljeno.
+            error: Dogodila se greška. Pokušaj ponovo.
+
+    view:
+        title: "Projekt:"
+        subtitle: "– dijeljenje vremenskih tablica projekta"
+        selection_title: Biranje mjeseca
+        month:
+            1: siječanj
+            2: veljača
+            3: ožujak
+            4: travanj
+            5: svibanj
+            6: lipanj
+            7: srpanj
+            8: kolovoz
+            9: rujan
+            10: listopad
+            11: studeni
+            12: prosinac
+        table:
+            title: Detalji
+            date: Datum
+            description: Opis
+            duration: Trajanje
+            empty: Za ovaj mjesec nema unosa
+            user: Korisnik
+            rate_hour: Satnica
+            rate_total: Ukupna cijena
+        auth:
+            title: Kontrola pristupa za projekt
+            description: Za pristup zapisima vremena za ovaj projekt upiši potrebnu lozinku.
+            password_label: "Upiši lozinku:"
+            send: Pošalji
+            invalid_password: Neispravna lozinka
+        error:
+            title: Dogodila se greška
+            access_denied: Pristup je odbijen.
+        chart:
+            per_month_title: Broj sati po mjesecu u %year%.
+        details:
+            table: Tablica
+            chart: Dijagram
+
+    model:
+        merge_record_mode:
+            none: Ne
+            merge: Da, sjedini sve
+            merge_use_first_of_day: Da, sjedini sve i koristi opis prvog zapisa
+            merge_use_last_of_day: Da, sjedini sve i koristi opis zadnjeg zapisa
